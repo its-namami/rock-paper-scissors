@@ -1,3 +1,5 @@
+"use strict";
+
 const getComputerChoice = () => {
   switch (Math.floor(Math.random() * 3)) {
   case 0: return "rock";
@@ -6,18 +8,18 @@ const getComputerChoice = () => {
   }
 }
 
-const getHumanChoice = () => prompt("Enter your choice")?.toLowerCase()
+const getHumanChoice = () => prompt("Enter your choice", "rock")?.toLowerCase()
 
 const playRound = (humanChoice, computerChoice) => {
   switch(getResult(humanChoice, computerChoice)) {
   case "draw":
     return alert(`It's a draw. Both have used ${humanChoice}.`);
   case "win":
-    humanScore++;
-    return alert(`You win. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+    alert(`You win. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+    return 1;
   case "lose":
-    computerScore++;
-    return alert(`You lose. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+    alert(`You lose. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+    return -1;
   }
 }
 
@@ -35,10 +37,32 @@ const getResult = (humanChoice, computerChoice) => {
   return "lose";
 }
 
-let humanScore = 0;
-let computerScore = 0;
+const playGame = () => {
+  let humanScore = 0;
+  let computerScore = 0;
 
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
+  for(let i = 0; i < 5; i++) {
+    const humanSelection = getHumanChoice();
+    const computerSelection = getComputerChoice();
 
-playRound(humanSelection, computerSelection);
+    switch (playRound(humanSelection, computerSelection)) {
+    case 1:
+      humanScore++;
+      break;
+    case -1:
+      computerScore++;
+    }
+  }
+
+  if (humanScore === computerScore) {
+    return alert("The game is a draw!");
+  }
+  
+  if (humanScore > computerScore) {
+    return alert("You win the game!");
+  }
+
+  alert("You lose the game!");  
+}
+
+playGame();
