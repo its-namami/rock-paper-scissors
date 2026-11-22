@@ -6,4 +6,7 @@ const getComputerChoice = () => {
   }
 }
 
-alert(getComputerChoice())
+const getHumanChoice = () => prompt("Enter your choice")?.toLowerCase()
+
+alert(`Human chose ${getHumanChoice()}`);
+alert(`Computer chose ${getComputerChoice()}`)
