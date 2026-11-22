@@ -8,8 +8,37 @@ const getComputerChoice = () => {
 
 const getHumanChoice = () => prompt("Enter your choice")?.toLowerCase()
 
+const playRound = (humanChoice, computerChoice) => {
+  switch(getResult(humanChoice, computerChoice)) {
+  case "draw":
+    return alert(`It's a draw. Both have used ${humanChoice}.`);
+  case "win":
+    humanScore++;
+    return alert(`You win. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+  case "lose":
+    computerScore++;
+    return alert(`You lose. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+  }
+}
+
+const getResult = (humanChoice, computerChoice) => {
+  const winningCombinations = ["rockscissors", "paperrock", "scissorspaper"];
+  
+  if (humanChoice === computerChoice) {
+    return "draw";
+  }
+
+  if (winningCombinations.includes(humanChoice + computerChoice)) {
+    return "win";
+  }
+
+  return "lose";
+}
+
 let humanScore = 0;
 let computerScore = 0;
 
-alert(`Human chose ${getHumanChoice()}`);
-alert(`Computer chose ${getComputerChoice()}`)
+const humanSelection = getHumanChoice();
+const computerSelection = getComputerChoice();
+
+playRound(humanSelection, computerSelection);
