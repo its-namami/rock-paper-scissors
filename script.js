@@ -8,5 +8,8 @@ const getComputerChoice = () => {
 
 const getHumanChoice = () => prompt("Enter your choice")?.toLowerCase()
 
+let humanScore = 0;
+let computerScore = 0;
+
 alert(`Human chose ${getHumanChoice()}`);
 alert(`Computer chose ${getComputerChoice()}`)
