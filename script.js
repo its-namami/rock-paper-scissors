@@ -37,11 +37,11 @@ const getResult = (humanChoice, computerChoice) => {
   return "lose";
 }
 
-const playGame = () => {
+const playGame = (rounds) => {
   let humanScore = 0;
   let computerScore = 0;
 
-  for(let i = 0; i < 5; i++) {
+  for(let i = 0; i < rounds; i++) {
     const humanSelection = getHumanChoice();
     const computerSelection = getComputerChoice();
 
@@ -64,5 +64,3 @@ const playGame = () => {
 
   alert("You lose the game!");  
 }
-
-playGame();
