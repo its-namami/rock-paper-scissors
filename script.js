@@ -55,7 +55,11 @@ const waitPlayerSelectEvent = () => new Promise(resolve => {
   }, { once: true });
 });
 
-const playGame = async (roundsNumber, resultsNode) => {
+const updateScoreboard = (humanScore, computerScore, scoreboardNode) => {
+  scoreboardNode.textContent = `You: ${humanScore} - ${computerScore} :Computer`;
+}
+
+const playGame = async (roundsNumber, resultsNode, scoreboardNode) => {
   let humanScore = 0;
   let computerScore = 0;
   
@@ -71,6 +75,8 @@ const playGame = async (roundsNumber, resultsNode) => {
     case -1:
       computerScore++;
     }
+
+    updateScoreboard(humanScore, computerScore, scoreboardNode);
   }
 
   if (humanScore === computerScore) {
@@ -86,6 +92,7 @@ const playGame = async (roundsNumber, resultsNode) => {
 
 const playerSelectionDiv = document.querySelector('#player-selection');
 const results = document.querySelector('#results');
+const scoreboard = document.querySelector('#scoreboard');
 
 playerSelectionDiv.addEventListener('click', e => {
   const playerSelectEvent = new CustomEvent('player-select', {
@@ -95,4 +102,4 @@ playerSelectionDiv.addEventListener('click', e => {
   document.dispatchEvent(playerSelectEvent);
 });
 
-playGame(5, results); // test
+playGame(5, results, scoreboard); // test
