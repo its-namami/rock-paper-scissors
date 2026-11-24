@@ -8,8 +8,6 @@ const getComputerChoice = () => {
   }
 }
 
-const getHumanChoice = () => prompt("Enter your choice", "rock")?.toLowerCase()
-
 const playRound = (humanChoice, computerChoice) => {
   switch(getResult(humanChoice, computerChoice)) {
   case "draw":
@@ -37,15 +35,20 @@ const getResult = (humanChoice, computerChoice) => {
   return "lose";
 }
 
-const playGame = (rounds) => {
+const playGame = async (rounds) => {
   let humanScore = 0;
   let computerScore = 0;
-
+  
   for(let i = 0; i < rounds; i++) {
-    const humanSelection = getHumanChoice();
+    let playerSelection = await new Promise(resolve => {
+      document.addEventListener('player-select', e => {
+        resolve(e.detail.selection);
+      }, { once: true });
+    });
+    
     const computerSelection = getComputerChoice();
-
-    switch (playRound(humanSelection, computerSelection)) {
+    
+    switch (playRound(playerSelection, computerSelection)) {
     case 1:
       humanScore++;
       break;
@@ -64,3 +67,15 @@ const playGame = (rounds) => {
 
   alert("You lose the game!");  
 }
+
+const playerSelectionDiv = document.querySelector('#player-selection');
+
+playerSelectionDiv.addEventListener('click', e => {
+  const playerSelectEvent = new CustomEvent('player-select', {
+    detail: { selection: e.target.id }
+  });
+
+  document.dispatchEvent(playerSelectEvent);
+});
+
+playGame(5); // test
