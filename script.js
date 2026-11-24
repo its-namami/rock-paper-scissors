@@ -8,15 +8,15 @@ const getComputerChoice = () => {
   }
 }
 
-const playRound = (humanChoice, computerChoice) => {
+const playRound = (humanChoice, computerChoice, resultsNode, roundNumber) => {
   switch(getResult(humanChoice, computerChoice)) {
   case "draw":
-    return alert(`It's a draw. Both have used ${humanChoice}.`);
+    return displayRoundResult(`Round ${roundNumber}: It's a draw. Both have used ${humanChoice}.`, resultsNode);
   case "win":
-    alert(`You win. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+    displayRoundResult(`Round ${roundNumber}: You win. You: ${humanChoice} vs Computer: ${computerChoice}.`, resultsNode);
     return 1;
   case "lose":
-    alert(`You lose. You: ${humanChoice} vs Computer: ${computerChoice}.`);
+    displayRoundResult(`Round ${roundNumber}: You lose. You: ${humanChoice} vs Computer: ${computerChoice}.`, resultsNode);
     return -1;
   }
 }
@@ -35,20 +35,36 @@ const getResult = (humanChoice, computerChoice) => {
   return "lose";
 }
 
-const playGame = async (rounds) => {
+const displayRoundResult = (stringResult, parentNode) => {
+  const result = document.createElement("p");
+  result.classList.add("round-result");
+  result.textContent = stringResult;
+  parentNode.appendChild(result);
+};
+
+const displayGameResult = (stringResult, parentNode) => {
+  const result = document.createElement("p");
+  result.classList.add("game-result");
+  result.textContent = stringResult;
+  parentNode.appendChild(result);
+};
+
+const waitPlayerSelectEvent = () => new Promise(resolve => {
+  document.addEventListener("player-select", e => {
+    resolve(e.detail.selection);
+  }, { once: true });
+});
+
+const playGame = async (roundsNumber, resultsNode) => {
   let humanScore = 0;
   let computerScore = 0;
   
-  for(let i = 0; i < rounds; i++) {
-    let playerSelection = await new Promise(resolve => {
-      document.addEventListener('player-select', e => {
-        resolve(e.detail.selection);
-      }, { once: true });
-    });
+  for(let i = 0; i < roundsNumber; i++) {
+    let playerSelection = await waitPlayerSelectEvent();
     
     const computerSelection = getComputerChoice();
     
-    switch (playRound(playerSelection, computerSelection)) {
+    switch (playRound(playerSelection, computerSelection, resultsNode, i + 1)) {
     case 1:
       humanScore++;
       break;
@@ -58,17 +74,18 @@ const playGame = async (rounds) => {
   }
 
   if (humanScore === computerScore) {
-    return alert("The game is a draw!");
+    return displayGameResult("The game is a draw!", resultsNode);
   }
   
   if (humanScore > computerScore) {
-    return alert("You win the game!");
+    return displayGameResult("You win the game!", resultsNode);
   }
 
-  alert("You lose the game!");  
+  displayGameResult("You lose the game!", resultsNode);  
 }
 
 const playerSelectionDiv = document.querySelector('#player-selection');
+const results = document.querySelector('#results');
 
 playerSelectionDiv.addEventListener('click', e => {
   const playerSelectEvent = new CustomEvent('player-select', {
@@ -78,4 +95,4 @@ playerSelectionDiv.addEventListener('click', e => {
   document.dispatchEvent(playerSelectEvent);
 });
 
-playGame(5); // test
+playGame(5, results); // test
