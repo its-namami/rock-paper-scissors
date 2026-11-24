@@ -4,6 +4,8 @@
 
 A small game I built for The Odin Project's Foundations course.
 
-It has an index page without any interface and is played entirely by prompt() and alert().
+It has an index page built with simple buttons, scoreboard and round/game results. Internally buttons send custom events.
 
 View the live site: [rock-paper-scissors.its-namami.dev](https://rock-paper-scissors.its-namami.dev)
+
+![Live site](docs/ui.png)
